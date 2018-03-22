@@ -1,0 +1,12 @@
+import java.io.*;
+BufferedReader vhod = new BufferedReader(new FileReader(imeVhod)); // odpri za branje
+PrintWriter izhod = new PrintWriter(new FileWriter(imeIzhoda)); // odpri za pisanje
+while (vhod.ready()) {
+	String vrstica = vhod.readLine().trim(); // preberi vrstico brez praznih znakov na zaèetku in na koncu
+	if (vrstica.equals("")) continue; // preskoèi prazne vrstice
+	String[] besede = vrstica.split(" +"); // razrezi na presledkih, ignoriraj veè presledkov
+	...
+	izhod.println(...)
+}
+vhod.close();
+izhod.cloce();

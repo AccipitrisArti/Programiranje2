@@ -1,4 +1,4 @@
-package vaja3;
+package vaja3do5;
 
 public class Test {
 

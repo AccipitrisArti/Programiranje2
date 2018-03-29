@@ -46,16 +46,16 @@ public class Graf {
 	
 	public static Graf prazen(int n) {
 		Graf g = new Graf();
-		for (int i=1; i<=n; i++) g.dodajTocko(new Tocka(i));
+		for (int i=1; i<=n; i++) g.dodajTocko(new Tocka(""+i));
 		return g;
 	}
 	
 	public static Graf cikel(int n) {
 		Graf g = prazen(n);
 		for (int i=2; i<=n; i++) {
-			g.dodajPovezavo(g.tocke.get(i), g.tocke.get(i-1));
+			g.dodajPovezavo(g.tocke.get(""+i), g.tocke.get(""+(i-1)));
 		}
-		g.dodajPovezavo(g.tocke.get(n), g.tocke.get(1));
+		g.dodajPovezavo(g.tocke.get(""+n), g.tocke.get(""+1));
 		return g;
 	}
 	
@@ -63,7 +63,7 @@ public class Graf {
 		Graf g = prazen(n);
 		for (int i=1; i<n; i++) {
 			for (int j=i+1; j<=n; j++) {
-				g.dodajPovezavo(g.tocka(i), g.tocka(j));
+				g.dodajPovezavo(g.tocka(""+i), g.tocka(""+j));
 			}
 		}
 		return g;
@@ -73,7 +73,7 @@ public class Graf {
 		Graf g = prazen(n+m);
 		for (int i=1; i<=n; i++) {
 			for (int j=1; j<=m; j++) {
-				g.dodajPovezavo(g.tocke.get(i), g.tocke.get(n+j));
+				g.dodajPovezavo(g.tocke.get(""+i), g.tocke.get(""+(n+j)));
 			}
 		}
 		return g;

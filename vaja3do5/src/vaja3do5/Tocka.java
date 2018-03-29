@@ -13,6 +13,9 @@ public class Tocka {
 	protected double y;
 	protected double staraX;
 	protected double staraY;
+	protected boolean aktivnost;
+	protected boolean oznacena;
+	protected int polmer;
 	
 	public Tocka(Object imeTocke) {
 		ime = imeTocke;
@@ -21,6 +24,9 @@ public class Tocka {
 		y = 0;
 		staraX = 0;
 		staraY = 0;
+		aktivnost = false;
+		oznacena = false;
+		polmer = 10;
 	}
 	
 	public int stopnja() {

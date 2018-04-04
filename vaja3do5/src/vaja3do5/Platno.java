@@ -116,6 +116,11 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		boolean aktivna = false;
 		
 		for (Tocka tocka : graf.tocke.values()) {
+			if (tocka.oznacena) {
+				tocka.staraX = tocka.x;
+				tocka.staraY = tocka.y;
+				tocka.aktivnost = false;
+			}
 			if (tocka.aktivnost) {
 				if (tocka.staraX == tocka.x && tocka.staraY == tocka.y) {
 					tocka.oznacena = !tocka.oznacena;
@@ -167,20 +172,54 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
 		/* Ob pritisku stori:
 		 * ce A oznaci vse,
 		 * ce E odznaci vse,
 		 * ce R dodaj vse povezave med oznacenimi,
 		 * ce S zbrisi vse povezave med oznacenimi,
-		 * ce D zbrici vse oznacene.
+		 * ce D zbrisi vse oznacene.
 		 */
-		
+		System.out.println(e.getKeyCode());
+		if(e.getKeyCode() == KeyEvent.VK_A) {
+			for (Tocka tocka : graf.tocke.values()) {
+				tocka.oznacena = true;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_E) {
+			for (Tocka tocka : graf.tocke.values()) {
+				tocka.oznacena = false;
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_R) {
+			for (Tocka tocka1 : graf.tocke.values()) {
+				if (tocka1.oznacena) {
+					for (Tocka tocka2 : graf.tocke.values()) {
+						if (tocka2.oznacena) {
+							graf.dodajPovezavo(tocka1, tocka2);
+						}
+					}
+				}
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_S) {
+			for (Tocka tocka1 : graf.tocke.values()) {
+				if (tocka1.oznacena) {
+					for (Tocka tocka2 : graf.tocke.values()) {
+						if (tocka2.oznacena) {
+							graf.odstraniPovezavo(tocka1, tocka2);
+						}
+					}
+				}
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_D) {
+			for (Tocka tocka : graf.tocke.values()) {
+				if (tocka.oznacena) {
+					graf.odstraniTocko(tocka);
+				}
+			}
+		}
+		repaint();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		
 	}
 

@@ -3,8 +3,14 @@ package vaja3do5;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -70,6 +76,8 @@ public class Okno extends JFrame implements ActionListener {
 		mb.add(izhod);
 		
 		setJMenuBar(mb);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	@Override
@@ -99,14 +107,59 @@ public class Okno extends JFrame implements ActionListener {
 			Color c = JColorChooser.showDialog(this,  "Izberi barvo toèke: ",  platno.barva);
 			platno.barva = c;
 		} else if (e.getSource() == povezave) {
-			Color c = JColorChooser.showDialog(this,  "Izberi barvo toèke: ",  platno.barvaPovezave);
+			Color c = JColorChooser.showDialog(this,  "Izberi barvo povezave: ",  platno.barvaPovezave);
 			platno.barvaPovezave = c;
 		} else if (e.getSource() == imp) {
-			
+			JFileChooser fc = new JFileChooser();
+			int option = fc.showOpenDialog(this);
+			if (option == JFileChooser.APPROVE_OPTION) {
+				String ime = fc.getSelectedFile().getPath();
+				try {
+					boolean blokTock = true;
+					BufferedReader vhod = new BufferedReader(new FileReader(ime)); // odpri za branje
+					while (vhod.ready()) {
+						String vrstica = vhod.readLine().trim(); // preberi vrstico brez praznih znakov na zaèetku in na koncu
+						if (vrstica.equals("")) continue; // preskoci prazne vrstice
+						if (vrstica.startsWith("# vertices")) {
+							/*
+							 * datoteka formata .net je oblike
+							 * # vertices (st. tock)
+							 * 1 x1 y1
+							 * 2 x2 y2
+							 * ...
+							 * # edges
+							 * 1 2 4
+							 * 2 1
+							 * 3 5 8
+							 * ...
+							 */
+						}
+						StringTokenizer st = new StringTokenizer(vrstica, " .,!?:;"); // odstrani nastete znake
+						while (st.hasMoreTokens()) {
+							System.out.println(st.nextToken());
+							// tu bere datoteko po besedah
+						}
+					}
+					vhod.close();
+				}
+				catch (IOException exc) {
+					
+				}
+			}
 		} else if (e.getSource() == exp) {
-			
+			JFileChooser fc = new JFileChooser();
+			int option = fc.showSaveDialog(this);
+			if (option == JFileChooser.APPROVE_OPTION) {
+				String ime = fc.getSelectedFile().getPath();
+				// try {
+					// ...
+				// }
+				// catch (IOException exc) {
+					// ...
+				// }
+			}
 		} else if (e.getSource() == izhod) {
-			
+			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
 		repaint();
 	}

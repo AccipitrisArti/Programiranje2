@@ -1,5 +1,6 @@
 package vaja3do5;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -10,7 +11,7 @@ public class Graf {
 	protected Map<Object, Tocka> tocke;
 	
 	public Graf() {
-		tocke = new TreeMap<Object, Tocka>();
+		tocke = new HashMap<Object, Tocka>();
 	}
 	
 	public Tocka tocka(Object ime) {
@@ -39,7 +40,7 @@ public class Graf {
 	
 	public void odstraniTocko(Tocka v) {
 		for (Tocka tocka : v.sosedi) {
-			odstraniPovezavo(v, tocka);
+			tocka.sosedi.remove(v);
 		}
 		tocke.remove(v.ime);
 	}

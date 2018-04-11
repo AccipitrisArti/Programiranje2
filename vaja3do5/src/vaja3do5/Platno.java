@@ -21,6 +21,7 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 	protected Graf graf;
 	protected int starX;
 	protected int starY;
+	protected Color barvaOkna = Color.white;
 	protected Color barva = Color.RED;
 	protected Color barvaAktivne = Color.BLUE;
 	protected Color barvaOznacene = Color.YELLOW;
@@ -32,7 +33,7 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		this.sirina = sirina;
 		this.visina = visina;
 		graf = null;
-		this.setBackground(Color.white);
+		this.setBackground(barvaOkna);
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.addKeyListener(this);
@@ -113,23 +114,27 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		
-		boolean aktivna = false;
+		boolean dodaj = false;
+		
+		if (starX == e.getX() && starY == e.getY()) {
+			dodaj = true;
+			System.out.println(starX +" "+ e.getX() +" "+ starY +" "+ e.getY());
+		}
 		
 		for (Tocka tocka : graf.tocke.values()) {
-			if (tocka.oznacena) {
-				tocka.staraX = tocka.x;
-				tocka.staraY = tocka.y;
-				tocka.aktivnost = false;
-			}
 			if (tocka.aktivnost) {
 				if (tocka.staraX == tocka.x && tocka.staraY == tocka.y) {
 					tocka.oznacena = !tocka.oznacena;
+					dodaj = false;
 				}
-			tocka.aktivnost = false;
-			aktivna = true;
+				tocka.aktivnost = false;
+			}
+			if (tocka.oznacena) {
+				tocka.staraX = tocka.x;
+				tocka.staraY = tocka.y;
 			}
 		}
-		if (!aktivna) {
+		if (dodaj) {
 			zapSt++;
 			Tocka nova = new Tocka("nova"+zapSt);
 			nova.x = e.getX();
@@ -209,9 +214,15 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 				}
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_D) {
-			for (Tocka tocka : graf.tocke.values()) {
-				if (tocka.oznacena) {
-					graf.odstraniTocko(tocka);
+			Object[] imena = new Object[graf.tocke.size()];
+			int i = 0;
+			for (Tocka v : graf.tocke.values()) {
+				imena[i] = v.ime;
+				i++;
+			}
+			for (Object ime : imena) {
+				if (graf.tocka(ime).oznacena) {
+					graf.odstraniTocko(graf.tocka(ime));
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-package vaja3do5;
+package risanjeGrafov;
 
 public class Test {
 

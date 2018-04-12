@@ -1,4 +1,4 @@
-package vaja3do5;
+package risanjeGrafov;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -118,7 +118,6 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		
 		if (starX == e.getX() && starY == e.getY()) {
 			dodaj = true;
-			System.out.println(starX +" "+ e.getX() +" "+ starY +" "+ e.getY());
 		}
 		
 		for (Tocka tocka : graf.tocke.values()) {

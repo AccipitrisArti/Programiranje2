@@ -1,4 +1,4 @@
-package vaja3do5;
+package risanjeGrafov;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -31,6 +31,12 @@ public class Okno extends JFrame implements ActionListener {
 	private JMenuItem imp = new JMenuItem("Uvozi graf");
 	private JMenuItem exp = new JMenuItem("Izvozi graf");
 	private JMenuItem izhod = new JMenuItem("Izhod");
+	/* moznosti nadaljevanja dela:
+	 * barva obrobe, barva okna, barva aktivne, barva oznacene, polmer tock
+	 * izvozi graf v tex datoteko (z moznostmi za oblikovanje)
+	 * spreminjanje imen tock, moznost izpisa imen v oknu
+	 * moznost nakljucnega in ciklicnega razporejanja ali v dve vrstici pri dvodelnem grafu
+	 */
 	
 	public Okno(int sirina, int visina) {
 		super();

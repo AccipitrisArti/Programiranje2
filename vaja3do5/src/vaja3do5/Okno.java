@@ -6,7 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
 import javax.swing.JColorChooser;
@@ -117,27 +119,30 @@ public class Okno extends JFrame implements ActionListener {
 				try {
 					boolean blokTock = true;
 					BufferedReader vhod = new BufferedReader(new FileReader(ime)); // odpri za branje
+					platno.graf = new Graf();
 					while (vhod.ready()) {
+						// za zgradbo datoteke .net poglej opis v primeru [exp]
 						String vrstica = vhod.readLine().trim(); // preberi vrstico brez praznih znakov na zaèetku in na koncu
 						if (vrstica.equals("")) continue; // preskoci prazne vrstice
 						if (vrstica.startsWith("# vertices")) {
-							/*
-							 * datoteka formata .net je oblike
-							 * # vertices (st. tock)
-							 * 1 x1 y1
-							 * 2 x2 y2
-							 * ...
-							 * # edges
-							 * 1 2 4
-							 * 2 1
-							 * 3 5 8
-							 * ...
-							 */
+							blokTock = true;
+							continue;
+						} else if (vrstica.startsWith("# edges")) {
+							blokTock = false;
+							continue;
 						}
-						StringTokenizer st = new StringTokenizer(vrstica, " .,!?:;"); // odstrani nastete znake
-						while (st.hasMoreTokens()) {
-							System.out.println(st.nextToken());
-							// tu bere datoteko po besedah
+						
+						StringTokenizer st = new StringTokenizer(vrstica, " "); // odstrani nastete znake
+						if (blokTock) {
+							Tocka v = new Tocka(st.nextToken());
+							platno.graf.dodajTocko(v);
+							v.x = Integer.parseInt(st.nextToken());
+							v.y = Integer.parseInt(st.nextToken());
+						} else {
+							Tocka v = platno.graf.tocke.get(st.nextToken());
+							while (st.hasMoreTokens()) {
+								platno.graf.dodajPovezavo(v, platno.graf.tocke.get(st.nextToken()));
+							}
 						}
 					}
 					vhod.close();
@@ -151,12 +156,38 @@ public class Okno extends JFrame implements ActionListener {
 			int option = fc.showSaveDialog(this);
 			if (option == JFileChooser.APPROVE_OPTION) {
 				String ime = fc.getSelectedFile().getPath();
-				// try {
-					// ...
-				// }
-				// catch (IOException exc) {
-					// ...
-				// }
+				try {
+					boolean blokTock = true; // opisujemo tocke ali povezave
+					PrintWriter izhod = new PrintWriter(new FileWriter(ime)); // odpri za pisanje
+						/*
+						 * datoteka formata .net je oblike
+						 * # vertices (st. tock)
+						 * 1 x1 y1
+						 * 2 x2 y2
+						 * ...
+						 * # edges
+						 * 1 2 4
+						 * 2 1
+						 * 3 5 8
+						 * ...
+						 */
+					izhod.println("# vertices " + platno.graf.tocke.size());
+					for (Tocka tocka : platno.graf.tocke.values()) {
+						izhod.println(tocka.ime + " " + Platno.round(tocka.x) + " " + Platno.round(tocka.y));
+					}
+					izhod.println("# edges");
+					for (Tocka tocka : platno.graf.tocke.values()) {
+						izhod.print(tocka.ime + "");
+						for (Tocka sosed : tocka.sosedi) {
+							izhod.print(" " + sosed.ime);
+						}
+						izhod.print("\n");
+					}
+					izhod.close();
+				}
+				catch (IOException exc) {
+					
+				}
 			}
 		} else if (e.getSource() == izhod) {
 			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));

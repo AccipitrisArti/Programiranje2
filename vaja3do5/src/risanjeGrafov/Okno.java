@@ -26,16 +26,22 @@ public class Okno extends JFrame implements ActionListener {
 	private JMenuItem poln = new JMenuItem("Poln");
 	private JMenuItem polnDvodelen = new JMenuItem("Poln dvodelen");
 	private JMenuItem cikel = new JMenuItem("Cikel");
-	private JMenuItem tocke = new JMenuItem("Toèke");
-	private JMenuItem povezave = new JMenuItem("Povezave");
+	private JMenuItem tocke = new JMenuItem("Barva toèke");
+	private JMenuItem aktivne = new JMenuItem("Barva aktivne toèke");
+	private JMenuItem oznacene = new JMenuItem("Barva oznacene toèke");
+	private JMenuItem povezave = new JMenuItem("Barva povezave");
+	private JMenuItem obrobe = new JMenuItem("Barva obrobe");
+	private JMenuItem okno = new JMenuItem("Barva okna");
+	private JMenuItem polmer = new JMenuItem("Polmer oznaèenih toèk");
 	private JMenuItem imp = new JMenuItem("Uvozi graf");
 	private JMenuItem exp = new JMenuItem("Izvozi graf");
 	private JMenuItem izhod = new JMenuItem("Izhod");
 	/* moznosti nadaljevanja dela:
-	 * barva obrobe, barva okna, barva aktivne, barva oznacene, polmer tock
+	 * da si v datoteki zapomni tudi polmere tock
 	 * izvozi graf v tex datoteko (z moznostmi za oblikovanje)
 	 * spreminjanje imen tock, moznost izpisa imen v oknu
 	 * moznost nakljucnega in ciklicnega razporejanja ali v dve vrstici pri dvodelnem grafu
+	 * pomoc (ukazi na tipkovnici)
 	 */
 	
 	public Okno(int sirina, int visina) {
@@ -60,15 +66,23 @@ public class Okno extends JFrame implements ActionListener {
 		izberiGraf.addSeparator();
 		mb.add(izberiGraf);
 		
-		JMenu barve = new JMenu("Nastavi barve");
+		JMenu izgled = new JMenu("Izgled");
 		
 		tocke.addActionListener(this);
-		barve.add(tocke);
+		izgled.add(tocke);
 		povezave.addActionListener(this);
-		barve.add(povezave);
+		izgled.add(povezave);
+		obrobe.addActionListener(this);
+		izgled.add(obrobe);
+		aktivne.addActionListener(this);
+		izgled.add(aktivne);
+		oznacene.addActionListener(this);
+		izgled.add(oznacene);
+		izgled.addSeparator();
+		polmer.addActionListener(this);
+		izgled.add(polmer);
 		
-		barve.addSeparator();
-		mb.add(barve);
+		mb.add(izgled);
 		
 		JMenu ie = new JMenu("Uvoz/izvoz");
 		
@@ -114,9 +128,26 @@ public class Okno extends JFrame implements ActionListener {
 		} else if (e.getSource() == tocke) {
 			Color c = JColorChooser.showDialog(this,  "Izberi barvo toèke: ",  platno.barva);
 			platno.barva = c;
+		} else if (e.getSource() == aktivne) {
+			Color c = JColorChooser.showDialog(this,  "Izberi barvo aktivne toèke: ",  platno.barvaAktivne);
+			platno.barvaAktivne = c;
+		} else if (e.getSource() == oznacene) {
+			Color c = JColorChooser.showDialog(this,  "Izberi barvo oznacene toèke: ",  platno.barvaOznacene);
+			platno.barvaOznacene = c;
+		} else if (e.getSource() == obrobe) {
+			Color c = JColorChooser.showDialog(this,  "Izberi barvo obrobe: ",  platno.barvaObrobe);
+			platno.barvaObrobe = c;
+		} else if (e.getSource() == okno) {
+			Color c = JColorChooser.showDialog(this,  "Izberi barvo okna: ",  platno.barvaOkna);
+			platno.barvaOkna = c;
 		} else if (e.getSource() == povezave) {
 			Color c = JColorChooser.showDialog(this,  "Izberi barvo povezave: ",  platno.barvaPovezave);
 			platno.barvaPovezave = c;
+		} else if (e.getSource() == polmer) {
+			String n = JOptionPane.showInputDialog("Vnesi število za polmer: ");
+			for (Tocka v : platno.graf.tocke.values()) {
+				if (v.oznacena) v.polmer = Integer.parseInt(n);
+			}
 		} else if (e.getSource() == imp) {
 			JFileChooser fc = new JFileChooser();
 			int option = fc.showOpenDialog(this);

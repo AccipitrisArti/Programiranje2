@@ -183,7 +183,6 @@ public class Platno extends JPanel implements MouseListener, MouseMotionListener
 		 * ce S zbrisi vse povezave med oznacenimi,
 		 * ce D zbrisi vse oznacene.
 		 */
-		System.out.println(e.getKeyCode());
 		if(e.getKeyCode() == KeyEvent.VK_A) {
 			for (Tocka tocka : graf.tocke.values()) {
 				tocka.oznacena = true;

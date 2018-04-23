@@ -33,13 +33,14 @@ public class Okno extends JFrame implements ActionListener {
 	private JMenuItem obrobe = new JMenuItem("Barva obrobe");
 	private JMenuItem okno = new JMenuItem("Barva okna");
 	private JMenuItem polmer = new JMenuItem("Polmer oznaèenih toèk");
-	private JMenuItem imp = new JMenuItem("Uvozi graf");
-	private JMenuItem exp = new JMenuItem("Izvozi graf");
+	private JMenuItem imp = new JMenuItem("Uvozi iz .net");
+	private JMenuItem exp = new JMenuItem("Izvozi v .net");
+	private JMenuItem tex = new JMenuItem("Izvozi v .tex");
 	private JMenuItem izhod = new JMenuItem("Izhod");
 	/* moznosti nadaljevanja dela:
 	 * da si v datoteki zapomni tudi polmere tock
-	 * izvozi graf v tex datoteko (z moznostmi za oblikovanje)
-	 * spreminjanje imen tock, moznost izpisa imen v oknu
+	 * izvozi graf v tex datoteko (z moznostmi za barve ...)
+	 * spreminjanje imen tock, moznost izpisa imen v oknu, moznost izpisa lastnosti tocke v oknu
 	 * moznost nakljucnega in ciklicnega razporejanja ali v dve vrstici pri dvodelnem grafu
 	 * pomoc (ukazi na tipkovnici)
 	 */
@@ -90,6 +91,8 @@ public class Okno extends JFrame implements ActionListener {
 		ie.add(imp);
 		exp.addActionListener(this);
 		ie.add(exp);
+		tex.addActionListener(this);
+		ie.add(tex);
 		
 		ie.addSeparator();
 		mb.add(ie);
@@ -220,6 +223,30 @@ public class Okno extends JFrame implements ActionListener {
 						}
 						izhod.print("\n");
 					}
+					izhod.close();
+				}
+				catch (IOException exc) {
+					
+				}
+			}
+		} else if (e.getSource() == tex) {
+			JFileChooser fc = new JFileChooser();
+			int option = fc.showSaveDialog(this);
+			if (option == JFileChooser.APPROVE_OPTION) {
+				String ime = fc.getSelectedFile().getPath();
+				try {  // https://www.sharelatex.com/learn/TikZ_package, https://www.sharelatex.com/blog/2013/08/27/tikz-series-pt1.html
+					PrintWriter izhod = new PrintWriter(new FileWriter(ime)); // odpri za pisanje
+					izhod.println("\\documentclass{article}\n\\usepackage{tikz}\n\\begin{document}");
+					izhod.println("% https://www.sharelatex.com/learn/TikZ_package\n% https://www.sharelatex.com/blog/2013/08/27/tikz-series-pt1.html\n\\begin{tikzpicture}[scale=.05,auto=left]");
+					for (Tocka tocka : platno.graf.tocke.values()) {
+						for (Tocka sosed : tocka.sosedi) {
+							izhod.println("\\draw[gray, thick] ("+tocka.x+","+tocka.y+") -- ("+sosed.x+","+sosed.y+");");
+						}
+					}
+					for (Tocka tocka : platno.graf.tocke.values()) {
+						izhod.println("\\filldraw[color=red, fill=red!20, very thick] ("+(tocka.x)+","+(tocka.y)+") circle ((120pt) node[anchor=center] {"+tocka.ime+"};");
+					}
+					izhod.println("\\end{tikzpicture}\n\n\\end{document}");
 					izhod.close();
 				}
 				catch (IOException exc) {
